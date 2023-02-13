@@ -23,4 +23,6 @@ Route::controller(UserController::class)->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('products', ProductController::class);
+    Route::post('users/logout', [UserController::class, 'logout']);
+    //Route::get('logged', [UserController::class, 'getLoggedUser']);
 });

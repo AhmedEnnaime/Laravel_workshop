@@ -42,7 +42,19 @@ class UserController extends BaseController
 
             return $this->sendResponse($success, 'User login successfully.', 200);
         } else {
-            return $this->sendError('Unauthorized.', ['error' => 'Unauthorized']);
+            return $this->sendError('Invalid credentials.', ['error' => 'Email or password invalid']);
         }
     }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return $this->sendResponse($request, 'User logged out successfully.', 200);
+    }
+
+    /*public function getLoggedUser()
+    {
+        $user = Auth::user();
+        die(print_r($user->name));
+    }*/
 }
