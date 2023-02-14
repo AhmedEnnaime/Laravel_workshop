@@ -12,7 +12,7 @@ class ProductController extends BaseController
 {
     public function index()
     {
-        $products = Product::all();
+        $products = Product::select("products.name", "products.detail", "categories.name as product_category")->join('categories', 'categories.id', '=', 'products.category_id')->get();
 
         return $this->sendResponse(ProductResource::collection($products), 'Products retrieved successfully.', 200);
     }
@@ -23,7 +23,8 @@ class ProductController extends BaseController
 
         $validator = FacadesValidator::make($input, [
             'name' => 'required',
-            'detail' => 'required'
+            'detail' => 'required',
+            'category_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -52,7 +53,8 @@ class ProductController extends BaseController
 
         $validator = FacadesValidator::make($input, [
             'name' => 'required',
-            'detail' => 'required'
+            'detail' => 'required',
+            'category_id' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -61,6 +63,7 @@ class ProductController extends BaseController
 
         $product->name = $input['name'];
         $product->detail = $input['detail'];
+        $product->category_id = $input['category_id'];
         $product->save();
 
         return $this->sendResponse(new ProductResource($product), 'Product updated successfully.', 200);
@@ -71,5 +74,11 @@ class ProductController extends BaseController
         $product->delete();
 
         return $this->sendResponse([], 'Product deleted successfully.', 202);
+    }
+
+    public function search($name)
+    {
+        $product = Product::where('name', 'like', '%' . $name . '%')->get();
+        return $this->sendResponse(new ProductResource($product), 'Product.', 200);
     }
 }

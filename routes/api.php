@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
@@ -23,6 +24,8 @@ Route::controller(UserController::class)->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('products', ProductController::class);
-    Route::post('users/logout', [UserController::class, 'logout']);
+    Route::resource('categories', CategoryController::class);
+    Route::post('logout', [UserController::class, 'logout']);
+    Route::get('products/search/{name}', [ProductController::class, 'search']);
     //Route::get('logged', [UserController::class, 'getLoggedUser']);
 });
