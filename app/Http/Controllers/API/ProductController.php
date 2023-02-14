@@ -12,7 +12,7 @@ class ProductController extends BaseController
 {
     public function index()
     {
-        $products = Product::select("products.name", "products.detail", "categories.name as product_category")->join('categories', 'categories.id', '=', 'products.category_id')->get();
+        $products = Product::select("products.id", "products.name", "products.detail", "categories.name as product_category")->join('categories', 'categories.id', '=', 'products.category_id')->get();
 
         return $this->sendResponse(ProductResource::collection($products), 'Products retrieved successfully.', 200);
     }
